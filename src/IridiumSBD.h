@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <WString.h> // for FlashString
 #include <Stream.h> // for Stream
+#include <Time.h>
 #include "Arduino.h"
 
 #define ISBD_LIBRARY_REVISION           2
@@ -62,7 +63,7 @@ public:
    int sendReceiveSBDText(const char *message, uint8_t *rxBuffer, size_t &rxBufferSize);
    int sendReceiveSBDBinary(const uint8_t *txData, size_t txDataSize, uint8_t *rxBuffer, size_t &rxBufferSize);
    int getSignalQuality(int &quality);
-   int getSystemTime(struct tm &tm);
+   int getSystemTime(tmElements_t &tm);
    int getFirmwareVersion(char *version, size_t bufferSize);
    int getWaitingMessageCount();
    bool isAsleep();

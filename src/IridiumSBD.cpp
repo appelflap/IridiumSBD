@@ -22,7 +22,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <time.h>
+#include <Time.h>
 #include "IridiumSBD.h"
 
 // Power on the RockBLOCK or return from sleep
@@ -187,7 +187,7 @@ bool IridiumSBD::hasRingAsserted()
    return ret;
 }
 
-int IridiumSBD::getSystemTime(struct tm &tm)
+int IridiumSBD::getSystemTime(tmElements_t &tm)
 {
    char msstmResponseBuf[24];
 
@@ -199,13 +199,13 @@ int IridiumSBD::getSystemTime(struct tm &tm)
       return ISBD_NO_NETWORK;
 
    // Latest epoch began at May 11, 2014, at 14:23:55 UTC.
-   struct tm epoch_start;
-   epoch_start.tm_year = 2014 - 1900;
-   epoch_start.tm_mon = 5 - 1;
-   epoch_start.tm_mday = 11;
-   epoch_start.tm_hour = 14;
-   epoch_start.tm_min = 23;
-   epoch_start.tm_sec = 55;
+   tmElements_t epoch_start;
+   epoch_start.Year = 2014 - 1970;
+   epoch_start.Month = 5 - 1;
+   epoch_start.Day = 11;
+   epoch_start.Hour = 14;
+   epoch_start.Minute = 23;
+   epoch_start.Second = 55;
 
    unsigned long ticks_since_epoch = strtoul(msstmResponseBuf, NULL, 16);
 
@@ -219,9 +219,9 @@ int IridiumSBD::getSystemTime(struct tm &tm)
    unsigned long small_ticks = ticks_since_epoch - (secs_since_epoch / 90) * 1000;
    secs_since_epoch += small_ticks * 90 / 1000;
 
-   time_t epoch_time = mktime(&epoch_start);
+   time_t epoch_time = makeTime(epoch_start);
    time_t now = epoch_time + secs_since_epoch;
-   memcpy(&tm, localtime(&now), sizeof tm);
+   memcpy(&tm, &now, sizeof tm);
    return ISBD_SUCCESS;
 }
 
